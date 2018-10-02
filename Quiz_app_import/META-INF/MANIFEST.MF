@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: mysql-connector-java-8.0.12.jar
+Main-Class: Quiz_app_import.QueryServletQuiz
+
