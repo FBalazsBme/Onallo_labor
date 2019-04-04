@@ -1,3 +1,5 @@
+
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -55,13 +57,22 @@ public class Users {
         ResultSet rset = st.executeQuery(getUsersFromDB);
         User actualUser = new User();
         while(rset.next()){
-            actualUser = new User(rset.getString("username"),rset.getString("passWord"));
+            actualUser = new User(rset.getInt("id"), rset.getString("username"),rset.getString("passWord"));
             userList.add(actualUser);
             usersFromDB.add(actualUser);
         }
     }
 
+    public ArrayList<User> getUsersFromDB() {
+        return usersFromDB;
+    }
+
+    public void setUsersFromDB(ArrayList<User> usersFromDB) {
+        this.usersFromDB = usersFromDB;
+    }
+
     public class User{
+        private int id;
         private String name;
         private String passWord;
 
@@ -70,7 +81,8 @@ public class Users {
             passWord = null;
         }
 
-        public User(String name, String passWord) {
+        public User(int id, String name, String passWord) {
+            this.id = id;
             this.name = name;
             this.passWord = passWord;
         }
@@ -91,6 +103,14 @@ public class Users {
             this.passWord = passWord;
         }
 
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
         public void addToDB(Connection conn) throws SQLException {
 
             String insertUserIntoDB = "insert into quiz.users (username, passWord)" +
@@ -101,6 +121,26 @@ public class Users {
             pst.setString(2, this.passWord);
 
             pst.execute();
+
+
+            String sqlNumOfRows = "SELECT MAX(id) AS total FROM quiz.users;";
+            Statement stmt2 = conn.createStatement();
+            ResultSet columnCountSet = stmt2.executeQuery(sqlNumOfRows);
+
+            if(columnCountSet.next()){
+                int ansNum = columnCountSet.getInt("total");
+                Global.setNumOfUsers(ansNum);
+            }
+
+        }
+
+        public void setAnsInDB(Connection conn, int setNum, int qId) throws SQLException {
+            String updateDB = "UPDATE quiz.questions SET user" +
+                    this.id +" = "+ setNum +" WHERE id = "+
+                    qId + ";";
+
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(updateDB);
         }
 
         @Override

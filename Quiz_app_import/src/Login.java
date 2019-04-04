@@ -1,3 +1,5 @@
+
+
 import com.mysql.cj.protocol.Resultset;
 
 import javax.servlet.RequestDispatcher;
@@ -11,6 +13,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Login extends HttpServlet {
     
@@ -24,15 +27,19 @@ public class Login extends HttpServlet {
         try {
             Class.forName("com.mysql.jdbc.Driver");  // Needed for JDK9/Tomcat9
             conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/quiz?useSSL=false", "Onlab", "onlab");
+                    "jdbc:mysql://localhost:3306/quiz?useSSL=false&allowPublicKeyRetrieval=true", "Onlab", "onlab");
             response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();
             Global.globalUsers.loadFromDB(conn);
 
             String email = request.getParameter("email");
             String pass = request.getParameter("password");
-            if(Global.globalUsers.containsUser(Global.globalUsers.new User(email, pass)))
+            if(Global.globalUsers.containsUser(Global.globalUsers.new User(0,email, pass)))
             {
+                ArrayList<Users.User> users = Global.globalUsers.getUsersFromDB();
+                int indexOf = users.indexOf(Global.globalUsers.new User(0,email, pass));
+
+                Global.actualUser = users.get(indexOf);
                 response.sendRedirect("http://localhost:8080/query1");
             }
             else

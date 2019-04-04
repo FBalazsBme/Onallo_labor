@@ -1,3 +1,4 @@
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -6,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.ArrayList;
+
 public class AddNewQuestion extends HttpServlet {
 
     Connection connection = null;
@@ -25,25 +28,42 @@ public class AddNewQuestion extends HttpServlet {
 
 
             String question = request.getParameter("question");
-            String answer1 = request.getParameter("answer1");
-            String answer2 = request.getParameter("answer2");
-            String answer3 = request.getParameter("answer3");
-            String answer4 = request.getParameter("answer4");
-            int cLoc = Integer.parseInt(request.getParameter("correctLoc"));//throws NumberFormatException
+            ArrayList<String> answers = new ArrayList<>();
+            ArrayList<Boolean> ansCorList = new ArrayList<>();
+            String parameterName = null;
+            String answer = null;
+            Integer isCorrectInt = null;
+            int j = 1;
+            for(int i = 1; i<(Global.getNumOfAnswers() + 1); i++){
+                parameterName = "answer" + i;
+                answer = request.getParameter(parameterName);
+                j++;
+                if(answer == null) break;
+                answers.add(answer);
+            }
 
-            if(Global.globalQuestions.containsQuestion(Global.globalQuestions.new Question(question, answer1,answer2,answer3,
-                    answer4,cLoc)))
+            for(int i = 1; i<j; i++){
+                parameterName = "ans" + i + "check";
+                if(request.getParameter(parameterName) == null){
+                    ansCorList.add(false);
+                } else {
+                    ansCorList.add(true);
+                }
+            }
+
+            if(Global.globalQuestions.containsQuestion(Global.globalQuestions.new Question(-1,question, answers, ansCorList)))
             {
-                out.println("Question not added, it already exists!");
+                response.sendRedirect("http://localhost:8080/webpages/login/pages/questionnotadded.html");
             }
             else
             {
-                Global.globalQuestions.addQuestion(Global.globalQuestions.new Question(question, answer1,answer2,answer3,
-                        answer4,cLoc));
+                Global.globalQuestions.addQuestion(Global.globalQuestions.new Question(-1,question, answers, ansCorList));
                 Global.globalQuestions.syncDB(connection);
+                Global.setNumOfQuestions(Global.getNumOfQuestions()+1);
                 out.println("Question added");
                 RequestDispatcher rd = request.getRequestDispatcher("index.html");
                 rd.include(request, response);
+                response.sendRedirect("http://localhost:8080/webpages/login/pages/questionadded.html");
             }
         }
         catch (NumberFormatException e) {
@@ -59,7 +79,17 @@ public class AddNewQuestion extends HttpServlet {
                 e.printStackTrace();
             }
         }
+    }
 
+    private Boolean convertIntToBoolean(int i) throws SQLException{
+        switch (i){
+            case 0:
+                return false;
+            case 1:
+                return true;
+            default:
+                throw new SQLException();
+        }
     }
 
 }

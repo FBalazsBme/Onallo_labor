@@ -11,6 +11,11 @@
       <servlet-class>AddNewQuestion</servlet-class>
    </servlet>
 
+    <servlet>
+        <servlet-name>AddNewAnsSlot1</servlet-name>
+        <servlet-class>AddNewAnsSlot</servlet-class>
+    </servlet>
+
    <servlet>
       <servlet-name>AddNewU</servlet-name>
       <servlet-class>AddNewUser</servlet-class>
@@ -25,12 +30,42 @@
       <servlet-name>UserLogin</servlet-name>
       <servlet-class>Login</servlet-class>
    </servlet>
- 
+
    <servlet>
       <servlet-name>UserQuery</servlet-name>
       <servlet-class>QueryServletQuiz</servlet-class>
    </servlet>
- 
+
+   <servlet>
+      <servlet-name>Setup</servlet-name>
+      <servlet-class>SetupServlet</servlet-class>
+   </servlet>
+
+   <servlet>
+      <servlet-name>Params</servlet-name>
+      <servlet-class>ParamsServlet</servlet-class>
+   </servlet>
+
+   <servlet>
+      <servlet-name>StatData</servlet-name>
+      <servlet-class>ParamsStatisticsServlet</servlet-class>
+   </servlet>
+
+   <servlet>
+      <servlet-name>EvalAns</servlet-name>
+      <servlet-class>ShowStatistics</servlet-class>
+   </servlet>
+
+    <servlet>
+        <servlet-name>SubmitQuiz</servlet-name>
+        <servlet-class>SubmitQuiz</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>QuestionsServ</servlet-name>
+        <servlet-class>QuestionsServlet</servlet-class>
+    </servlet>
+
    <!-- Note: All <servlet> elements MUST be grouped together and
          placed IN FRONT of the <servlet-mapping> elements -->
 
@@ -38,6 +73,12 @@
       <servlet-name>AddNewQ</servlet-name>
       <url-pattern>/newquestion</url-pattern>
    </servlet-mapping>
+
+
+   <servlet-mapping>
+      <servlet-name>AddNewAnsSlot1</servlet-name>
+      <url-pattern>/newslot</url-pattern>
+        </servlet-mapping>
 
    <servlet-mapping>
       <servlet-name>AddNewU</servlet-name>
@@ -58,4 +99,37 @@
       <servlet-name>UserQuery</servlet-name>
       <url-pattern>/query1</url-pattern>
    </servlet-mapping>
+
+   <servlet-mapping>
+      <servlet-name>Setup</servlet-name>
+      <url-pattern>/setup</url-pattern>
+   </servlet-mapping>
+
+   <servlet-mapping>
+      <servlet-name>Params</servlet-name>
+      <url-pattern>/getparams</url-pattern>
+   </servlet-mapping>
+
+
+   <servlet-mapping>
+      <servlet-name>StatData</servlet-name>
+      <url-pattern>/getstatdata</url-pattern>
+   </servlet-mapping>
+
+   <servlet-mapping>
+      <servlet-name>EvalAns</servlet-name>
+      <url-pattern>/evalans</url-pattern>
+   </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SubmitQuiz</servlet-name>
+        <url-pattern>/submitquiz</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>QuestionsServ</servlet-name>
+        <url-pattern>/getquestions</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>

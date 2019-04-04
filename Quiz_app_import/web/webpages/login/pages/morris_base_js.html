@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<script language="javascript">
+    var maxNumOfAnswers = 4;
+    var actualNumOfAnswers = 4;
+    window.onload = function () {
+        httpGetAsync("http://localhost:8080/getparams", function(input) {
+            maxNumOfAnswers = parseInt(input, 10);})
+    }
+
+     function() {  // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+        $.get("http://localhost:8080/getstatdata", function(responseJson) {    // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+            var $ul = $("<ul>").appendTo($("#somediv")); // Create HTML <ul> element and append it to HTML DOM element with ID "somediv".
+            $.each(responseJson, function(index, item) { // Iterate over the JSON array.
+                $("<li>").text(item).appendTo($ul);      // Create HTML <li> element, set its text content with currently iterated item and append it to the <ul>.
+            });
+        });
+    });
+    function httpGetAsync(theUrl, callback)
+    {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200){
+                console.log('inside if', maxNumOfAnswers);
+                callback(xmlHttp.responseText);
+                alert(maxNumOfAnswers);
+            }
+            console.log('after if', maxNumOfAnswers);
+        }
+        xmlHttp.open("POST",theUrl,true);
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlHttp.send(null);
+    }
+    function htmlToElement(html) {
+        var template = document.createElement('template');
+        html = html.trim();
+        template.innerHTML = html;
+        return template.content.firstChild;
+    }
+    function add(type) {
+        var elemtLoc = document.getElementsByName("myform")[0];
+        if(actualNumOfAnswers < maxNumOfAnswers){
+            actualNumOfAnswers = actualNumOfAnswers + 1;
+            var elementText = htmlToElement("<input class=\"form-control\" placeholder=\"answer " + actualNumOfAnswers + "\" name=\"answer" + actualNumOfAnswers +
+                "\"  type=\"answer" + actualNumOfAnswers + "\" value=\"\">");
+            var elementFile = htmlToElement("<input type=\"file\" class=\"filestyle\" data-classButton=\"btn btn-primary\" " +
+                "data-input=\"false\" data-text=\"Add picture\" data-classIcon=\"icon-plus\" data-buttonText=\"Your label here.\"\n" +
+                "name=\"picA2\">");
+            var checkBoxElement = htmlToElement("<input class = \"ans" + actualNumOfAnswers + "check\" type = \"checkbox\" name = \"ans" + actualNumOfAnswers + "check\" id = \"ans" + actualNumOfAnswers + "check\"" +
+                " value =\"" + actualNumOfAnswers +"\" >");
+            var textNode = document.createTextNode("Correct Answer");
+            elemtLoc.appendChild(elementText);
+            elemtLoc.appendChild(elementFile);
+            elemtLoc.appendChild(checkBoxElement);
+            elemtLoc.appendChild(textNode);
+        }
+    }
+    function myFunction() {
+        add("answer");
+    };
+</script>
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Morris.js Charts</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Bar Chart Example
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="morris-bar-chart"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-6 -->
+
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../vendor/raphael/raphael.min.js"></script>
+    <script src="../vendor/morrisjs/morris.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+

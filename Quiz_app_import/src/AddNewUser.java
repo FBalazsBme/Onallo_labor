@@ -1,3 +1,5 @@
+
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,16 +30,18 @@ public class AddNewUser extends HttpServlet {
 
             String email = request.getParameter("email");
             String pass = request.getParameter("password");
-            if(Global.globalUsers.containsUser(Global.globalUsers.new User(email, pass)))
+            if(Global.globalUsers.containsUser(Global.globalUsers.new User(0,email, pass)))
             {
                 response.sendRedirect("http://localhost:8080/webpages/login/pages/usernotadded.html");
             }
             else
             {
-                Global.globalUsers.addUser(Global.globalUsers.new User(email, pass));
+                Users.User u = Global.globalUsers.new User(0,email, pass);
+                Global.globalUsers.addUser(u);
                 Global.globalUsers.syncDB(connection);
+                Global.setNumOfUSersFromDB(connection);
+                u.setId(Global.getNumOfUsers());
                 response.sendRedirect("http://localhost:8080/webpages/login/pages/useradded.html");
-
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

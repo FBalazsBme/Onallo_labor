@@ -28,7 +28,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+        <a class="navbar-brand" href="index.html"></a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fa fa-bars"></i>
@@ -36,23 +36,17 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="../../webpages/login/pages/addquestion.html">Add Question</a>
+              <a class="nav-link" href="../../webpages/login/pages/addquestion_js.html">Add Question</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="../../webpages/login/pages/adduser.html">Add User</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
+              <a class="nav-link" href="../../webpages/login/pages/setup.html">Setup</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="about.html">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="post.html">Sample Post</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="contact.html">Contact</a>
-            </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="../../webpages/login/pages/login.html">Log out</a>
+              </li>
           </ul>
         </div>
       </div>
@@ -65,8 +59,8 @@
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h2>Clean Blog</h2>
-              <span class="subheading">Here should be the question</span>
+                <h2>Quiz</h2>
+                <span class="subheading">Please fill out the below quiz by selecting the correct answers.</span>
             </div>
           </div>
         </div>
@@ -76,16 +70,84 @@
     <!-- Main Content -->
     <div class="container">
       <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto"><div class="post-preview">
+        <div class="col-lg-8 col-md-10 mx-auto"><form method="post" action="../../../evalans"><div class="post-preview">
 <a href="../../checkans">
-<h2 class="post-title">Milyen az Èg szÌne nappal tiszta id?ben?</h2></a><h3 class="post-subtitle">sz¸rke</h3><h3 class="post-subtitle">kÈk</h3><h3 class="post-subtitle">zˆld</h3><h3 class="post-subtitle">piros</h3></a></div><hr><div class="post-preview">
+<h2 class="post-title">Milyen az √©g sz√≠ne nappal tiszta id≈ëben?</h2></a><h3 class="post-subtitle">sz√ºrke</h3><input type = "checkbox"
+name = "radAns11"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">k√©k</h3><input type = "checkbox"
+name = "radAns12"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">z√∂ld</h3><input type = "checkbox"
+name = "radAns13"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">piros</h3><input type = "checkbox"
+name = "radAns14"
+id = "sizeSmall"
+value = "small"
+ /></a></div><hr><div class="post-preview">
 <a href="../../checkans">
-<h2 class="post-title">H·ny l·ba van a lÛnak?</h2></a><h3 class="post-subtitle">1</h3><h3 class="post-subtitle">2</h3><h3 class="post-subtitle">4</h3><h3 class="post-subtitle">5</h3></a></div><hr><div class="post-preview">
+<h2 class="post-title">H√°ny l√°ba van a l√≥nak?</h2></a><h3 class="post-subtitle">1</h3><input type = "checkbox"
+name = "radAns21"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">2</h3><input type = "checkbox"
+name = "radAns22"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">4</h3><input type = "checkbox"
+name = "radAns23"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">5</h3><input type = "checkbox"
+name = "radAns24"
+id = "sizeSmall"
+value = "small"
+ /></a></div><hr><div class="post-preview">
 <a href="../../checkans">
-<h2 class="post-title">Milyen adatb·ziskezel?t haszn·l ez az alkalmaz·s?</h2></a><h3 class="post-subtitle">SQLite</h3><h3 class="post-subtitle">MongoDB</h3><h3 class="post-subtitle">MSSQL</h3><h3 class="post-subtitle">MYSQL</h3></a></div><hr><div class="post-preview">
+<h2 class="post-title">Milyen adatb√°ziskezel≈ët haszn√°l ez az alkalmaz√°s?</h2></a><h3 class="post-subtitle">SQLite</h3><input type = "checkbox"
+name = "radAns31"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">MongoDB</h3><input type = "checkbox"
+name = "radAns32"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">MSSQL</h3><input type = "checkbox"
+name = "radAns33"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">MYSQL</h3><input type = "checkbox"
+name = "radAns34"
+id = "sizeSmall"
+value = "small"
+ /></a></div><hr><div class="post-preview">
 <a href="../../checkans">
-<h2 class="post-title">Elso online kerdes?</h2></a><h3 class="post-subtitle">val1</h3><h3 class="post-subtitle">val2</h3><h3 class="post-subtitle">val3</h3><h3 class="post-subtitle">val4</h3></a></div><hr><div class="post-preview">
-<a href="../../checkans">
-<h2 class="post-title">Q1</h2></a><h3 class="post-subtitle">A1</h3><h3 class="post-subtitle">A2</h3><h3 class="post-subtitle">A3</h3><h3 class="post-subtitle">A4</h3></a></div><hr><div class="post-preview">
-<a href="../../checkans">
-<h2 class="post-title">QQ1</h2></a><h3 class="post-subtitle">A1</h3><h3 class="post-subtitle">A2</h3><h3 class="post-subtitle">A3</h3><h3 class="post-subtitle">A4</h3></a></div><hr></div></div></div><hr></body></html>
+<h2 class="post-title">QuestionAdd</h2></a><h3 class="post-subtitle">AnswerAdd1</h3><input type = "checkbox"
+name = "radAns41"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">AnswerAdd2</h3><input type = "checkbox"
+name = "radAns42"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">AnswerAdd3</h3><input type = "checkbox"
+name = "radAns43"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">AnswerAdd4</h3><input type = "checkbox"
+name = "radAns44"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">AnswerAdd5</h3><input type = "checkbox"
+name = "radAns45"
+id = "sizeSmall"
+value = "small"
+ /><h3 class="post-subtitle">AnswerAdd6</h3><input type = "checkbox"
+name = "radAns46"
+id = "sizeSmall"
+value = "small"
+ /></a></div><hr><input type="submit" value="Submit answers" class="btn btn-lg btn-success btn-block" ></form></div></div></div><hr></body></html>

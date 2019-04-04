@@ -1,3 +1,5 @@
+
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -10,6 +12,14 @@ public class Questions {
         questionList = new ArrayList<Question>();
         questionsFromDB = new ArrayList<Question>();
 
+    }
+
+    public int getNumOfQuestions(){
+        return questionList.size();
+    }
+
+    public ArrayList<Question> getQuestionsFromDB() {
+        return questionsFromDB;
     }
 
     public Questions(ArrayList<Question> userList) {
@@ -51,65 +61,123 @@ public class Questions {
 
     public void loadFromDB(Connection conn) throws SQLException {
         Statement st = conn.createStatement();
-        String getQuestionsFromDB = "select * from quiz.questions;";
+        String getQuestionsFromDB = "select * from quiz.questions ORDER BY id;";
         ResultSet rset = st.executeQuery(getQuestionsFromDB);
         Question actualQuestion = new Question();
         while(rset.next()){
-            actualQuestion = new Question(rset.getString("question"),rset.getString("answer1"),
-                    rset.getString("answer2"), rset.getString("answer3"), rset.getString("answer4"), rset.getInt("correctLoc"));
-            questionList.add(actualQuestion);
-            questionsFromDB.add(actualQuestion);
+
+            ArrayList<String> answers = new ArrayList<>();
+            ArrayList<Boolean> ansCorList = new ArrayList<>();
+
+            for(int k = 1; k < (Global.getNumOfAnswers()+1); ++k) {
+                String appendString = rset.getString("answer" + k);
+                boolean b1 = convertIntToBoolean(rset.getInt("ans"+ k +"True"));
+                if (!appendString.equals("NA")){
+                    answers.add(appendString);
+                    ansCorList.add(b1);
+                }
+                else {
+                    break;
+                }
+            }
+
+            int id = rset.getInt("id");
+            String question = rset.getString("question");
+
+            questionList.add(new Question(id, question, answers, ansCorList));
+            questionsFromDB.add(new Question(id, question, answers, ansCorList));
+            int size = answers.size();
+            int o = 1;
+        }
+    }
+
+    private Boolean convertIntToBoolean(int i) throws SQLException{
+        switch (i){
+            case 0:
+                return false;
+            case 1:
+                return true;
+            default:
+                throw new SQLException();
+        }
+    }
+
+    private int convertBooleanToInt (boolean b) {
+        if(b==true){
+            return 1;
+        } else {
+            return 0;
         }
     }
 
     public class Question{
+        private int id;
         private String question;
-        private String answer1;
-        private String answer2;
-        private String answer3;
-        private String answer4;
-        private int correctLoc;
-
+        private ArrayList<Answer> answers;
 
         public Question(){
             this.question = null;
-            this.answer1 = null;
-            this.answer2 = null;
-            this.answer3 = null;
-            this.answer4 = null;
-            this.correctLoc = 0;
+            this.answers = new ArrayList<Answer>();
         }
 
-
-        public Question(String question, String answer1, String answer2, String answer3, String answer4, int correctLoc) throws IllegalArgumentException {
+        public Question(int id,String question, ArrayList<String> answers, ArrayList<Boolean> ansCorrectList)
+                throws IllegalArgumentException {
+            this.id = id;
             this.question = question;
-            this.answer1 = answer1;
-            this.answer2 = answer2;
-            this.answer3 = answer3;
-            this.answer4 = answer4;
-            if(correctLoc > 0 && correctLoc < 5){
-                this.correctLoc = correctLoc;
-            }
-            else{
-                throw new IllegalArgumentException();
+            this.answers = new ArrayList<Answer>();
+            int i = 0;
+            for(String a:answers){
+                this.answers.add(new Answer(a, ansCorrectList.get(i)));
+                ++i;
             }
         }
 
+        public boolean doAnswersMatch(ArrayList<Boolean> checkedAns){
+            int i = 0;
+            for(Boolean b:checkedAns){
+                if(b != this.answers.get(i).isAnsCorrect()){
+                    return false;
+                }
+                i++;
+            }
+            return true;
+        }
 
+        public ArrayList<Answer> getAnswers() {
+            return answers;
+        }
 
+        public int getId() {
+            return id;
+        }
 
         public void addToDB(Connection conn) throws SQLException {
 
-            String insertQuestionintoDB = "insert into quiz.questions (question, answer1, answer2, answer3, answer4, correctLoc)" +
-                    " values (?,?,?,?,?,?);";
-            PreparedStatement pst = conn.prepareStatement(insertQuestionintoDB);
+            StringBuffer insertQintoDBBuffer = new StringBuffer();
+            insertQintoDBBuffer.append("insert into quiz.questions (question");
+            int i = 1;
+            for(Answer a:answers) {
+                insertQintoDBBuffer.append(" ,answer");
+                insertQintoDBBuffer.append(i);
+                insertQintoDBBuffer.append(" ,ans");
+                insertQintoDBBuffer.append(i);
+                insertQintoDBBuffer.append("True");
+                ++i;
+            }
+            insertQintoDBBuffer.append(") values (?");
+            for(Answer a:answers) {
+                insertQintoDBBuffer.append(",?,?");
+            }
+            insertQintoDBBuffer.append(");");
+
+            PreparedStatement pst = conn.prepareStatement(insertQintoDBBuffer.toString());
 
             pst.setString(1, this.question);
-            pst.setString(2, this.answer1);
-            pst.setString(3, this.answer2);
-            pst.setString(4, this.answer3);
-            pst.setString(5, this.answer4);
-            pst.setInt(6, this.correctLoc);
+            i = 2;
+            for(Answer a:answers){
+                pst.setString(i++, a.getAnswer());
+                pst.setInt(i++, convertBooleanToInt(a.isAnsCorrect()));
+            }
 
             pst.execute();
         }
@@ -129,19 +197,19 @@ public class Questions {
                 return false;
             }
 
-            if ((this.answer1 == null) ? (other.answer1 != null) : !this.answer1.equals(other.answer1)) {
+            if ((this.answers.get(0).getAnswer() == null) ? (other.answers.get(0).getAnswer() != null) : !this.answers.get(0).getAnswer().equals(other.answers.get(0).getAnswer())) {
                 return false;
             }
 
-            if ((this.answer2 == null) ? (other.answer2 != null) : !this.answer2.equals(other.answer2)) {
+            if ((this.answers.get(1).getAnswer() == null) ? (other.answers.get(1).getAnswer() != null) : !this.answers.get(1).getAnswer().equals(other.answers.get(1).getAnswer())) {
                 return false;
             }
 
-            if ((this.answer3 == null) ? (other.answer3 != null) : !this.answer3.equals(other.answer3)) {
+            if ((this.answers.get(2).getAnswer() == null) ? (other.answers.get(2).getAnswer() != null) : !this.answers.get(2).getAnswer().equals(other.answers.get(2).getAnswer())) {
                 return false;
             }
 
-            if ((this.answer4 == null) ? (other.answer4 != null) : !this.answer4.equals(other.answer4)) {
+            if ((this.answers.get(3).getAnswer() == null) ? (other.answers.get(3).getAnswer() != null) : !this.answers.get(3).getAnswer().equals(other.answers.get(3).getAnswer())) {
                 return false;
             }
 
@@ -153,10 +221,10 @@ public class Questions {
         public int hashCode() {
             int hash = 3;
             hash = 53 * hash + (this.question != null ? this.question.hashCode() : 0);
-            hash = 53 * hash + (this.answer1 != null ? this.answer1.hashCode() : 0);
-            hash = 53 * hash + (this.answer2 != null ? this.answer2.hashCode() : 0);
-            hash = 53 * hash + (this.answer3 != null ? this.answer3.hashCode() : 0);
-            hash = 53 * hash + (this.answer4 != null ? this.answer4.hashCode() : 0);
+            hash = 53 * hash + (this.answers.get(0).getAnswer() != null ? this.answers.get(0).getAnswer().hashCode() : 0);
+            hash = 53 * hash + (this.answers.get(1).getAnswer() != null ? this.answers.get(1).getAnswer().hashCode() : 0);
+            hash = 53 * hash + (this.answers.get(2).getAnswer() != null ? this.answers.get(2).getAnswer().hashCode() : 0);
+            hash = 53 * hash + (this.answers.get(3).getAnswer() != null ? this.answers.get(3).getAnswer().hashCode() : 0);
             return hash;
         }
 
